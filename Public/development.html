@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Leadership & Skills Development - Destiny Communication</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eef2f3;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #0056b3;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-top: 30px;
+            color: #007bff;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        li::before {
+            content: "✔️";
+            position: absolute;
+            left: 0;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .highlight-box {
+            margin-top: 30px;
+            background: #f0f8ff;
+            padding: 20px;
+            border-left: 5px solid #007bff;
+            border-radius: 8px;
+        }
+
+        .video-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        iframe {
+            width: 100%;
+            max-width: 600px;
+            height: 340px;
+            border: none;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Leadership & Skills Development</h1>
+        <p>
+            At Destiny Communication, we believe in shaping future leaders through transformative learning experiences.
+            Our leadership and skills development program is designed to help individuals grow professionally and personally,
+            enabling them to take charge, inspire others, and navigate challenges effectively.
+        </p>
+
+        <div class="highlight-box">
+            <strong>🌟 Why Join This Program?</strong>
+            <p>
+                Whether you're an aspiring leader or someone looking to boost your soft skills,
+                this program offers interactive workshops, real-world scenarios, and expert-led training.
+            </p>
+        </div>
+
+        <h2>What You'll Learn</h2>
+        <ul>
+            <li>Leadership Essentials & Team Management</li>
+            <li>Critical Thinking & Decision Making</li>
+            <li>Public Speaking & Effective Communication</li>
+            <li>Problem Solving & Innovation Skills</li>
+            <li>Personal Growth & Confidence Building</li>
+        </ul>
+
+        <div class="video-section">
+            <h2>Watch: Skills in Action</h2>
+            <iframe src="https://www.youtube.com/embed/2kJ5-dF7AbU" title="Leadership & Communication Skills Demo"></iframe>
+        </div>
+
+        <a href="index.html">
+            <button class="btn">← Back to Home</button>
+        </a>
+    </div>
+
+    <script>
+        const btn = document.querySelector('.btn');
+        btn.addEventListener('click', () => {
+            alert("Redirecting you to the homepage...");
+        });
+
+        console.log("Leadership & Skills Development Page Loaded Successfully!");
+    </script>
+</body>
+
+</html>

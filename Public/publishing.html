@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Destiny Communication - Media & Publishing</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f8fb;
+      color: #333;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #007bff;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      margin-top: 30px;
+      color: #28a745;
+    }
+
+    p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 20px;
+    }
+
+    li {
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+      padding-left: 25px;
+      position: relative;
+    }
+
+    li::before {
+      content: "✔️";
+      position: absolute;
+      left: 0;
+      color: #007bff;
+    }
+
+    .btn {
+      padding: 12px 25px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      margin-top: 30px;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #0056b3;
+    }
+
+    .highlight-box {
+      margin-top: 30px;
+      background: #e3f2fd;
+      padding: 20px;
+      border-left: 5px solid #007bff;
+      border-radius: 8px;
+    }
+
+    .video-section {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    iframe {
+      width: 100%;
+      max-width: 600px;
+      height: 340px;
+      border: none;
+      border-radius: 10px;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      .container {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Welcome to Destiny Communication</h1>
+    <p>
+      At Destiny Communication, we help you shape and share your brand’s message across various platforms. Whether it’s print or digital, we create compelling content and impactful communication that resonates with your audience.
+    </p>
+
+    <div class="highlight-box">
+      <strong>📣 Our Mission</strong>
+      <p>
+        To be a trusted partner in your publishing and communication journey, offering services that amplify your voice,
+        build your identity, and bring your creative ideas to life.
+      </p>
+    </div>
+
+    <h2>Our Core Services</h2>
+    <ul>
+      <li>📰 Book, Magazine, and Journal Publishing</li>
+      <li>📣 Digital Promotions & Media Outreach</li>
+      <li>🎨 Visual Branding & Graphic Design</li>
+      <li>🗣️ Strategic Content & PR Consulting</li>
+      <li>🎥 Event Planning, Video Production & Coverage</li>
+    </ul>
+
+    <div class="video-section">
+      <h2>Why Media Strategy is Essential</h2>
+      <iframe src="https://www.youtube.com/embed/oUIheHUo5z4" title="Media & Publishing Overview"></iframe>
+    </div>
+
+    <a href="index.html">
+      <button class="btn">← Back to Home</button>
+    </a>
+  </div>
+
+  <script>
+    document.querySelector(".btn").addEventListener("click", () => {
+      alert("Redirecting to our homepage...");
+    });
+    console.log("Destiny Communication - Publishing Page Loaded Successfully!");
+  </script>
+</body>
+
+</html>

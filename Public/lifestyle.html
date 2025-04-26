@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Destiny Lifestyle - Wellness & Inspiration</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #eef2f3;
+      color: #333;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #28a745;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      margin-top: 30px;
+      color: #17a2b8;
+    }
+
+    p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 20px;
+    }
+
+    li {
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+      padding-left: 25px;
+      position: relative;
+    }
+
+    li::before {
+      content: "🌟";
+      position: absolute;
+      left: 0;
+    }
+
+    .btn {
+      padding: 12px 25px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      margin-top: 30px;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #0056b3;
+    }
+
+    .highlight-box {
+      margin-top: 30px;
+      background: #e8f5e9;
+      padding: 20px;
+      border-left: 5px solid #28a745;
+      border-radius: 8px;
+    }
+
+    .video-section {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    iframe {
+      width: 100%;
+      max-width: 600px;
+      height: 340px;
+      border: none;
+      border-radius: 10px;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      .container {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Welcome to Destiny Lifestyle</h1>
+    <p>
+      Explore our curated lifestyle guidance to help you build balance, boost well-being, and develop sustainable habits that
+      enhance your personal and professional life.
+    </p>
+
+    <div class="highlight-box">
+      <strong>🌱 Why Focus on Lifestyle?</strong>
+      <p>
+        A healthy lifestyle is the foundation of lasting success. Through our tips and guidance, we help you integrate wellness, nutrition,
+        and mindfulness into your routine.
+      </p>
+    </div>
+
+    <h2>What We Offer</h2>
+    <ul>
+      <li>Wellness Tips & Mental Health Guidance</li>
+      <li>Healthy Eating & Nutrition Insights</li>
+      <li>Yoga, Meditation & Mindfulness</li>
+      <li>Life Coaching & Goal Setting</li>
+      <li>Daily Affirmations & Productivity Hacks</li>
+    </ul>
+
+    <div class="video-section">
+      <h2>Watch: Build a Balanced Lifestyle</h2>
+      <iframe src="https://www.youtube.com/embed/qfLHTZogqFw" title="Lifestyle Wellness Tips"></iframe>
+    </div>
+
+    <a href="index.html">
+      <button class="btn">← Back to Home</button>
+    </a>
+  </div>
+
+  <script>
+    document.querySelector(".btn").addEventListener("click", () => {
+      alert("Redirecting to the homepage...");
+    });
+    console.log("Destiny Lifestyle Page Loaded Successfully!");
+  </script>
+</body>
+
+</html>
