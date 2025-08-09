@@ -8,73 +8,78 @@ const rateLimit = require("express-rate-limit");
 const admin = require("firebase-admin");
 const rssParser = require("rss-parser");
 
-// Load .env only in development
+// Load .env in dev
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 
-// Firebase service account JSON - better to load from env variable in production
-const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT || '{}');
+// Parse firebase service account JSON from env var
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT || "{}");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Use PORT from environment or fallback
 const PORT = process.env.PORT || 5000;
 
-// Redis client setup
+// Redis client
 const client = redis.createClient({
   url: process.env.REDIS_URL || "redis://localhost:6379",
 });
 client.connect().catch(console.error);
 
-// Initialize Firebase Admin
+// Firebase init
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: process.env.FIREBASE_DATABASE_URL,
 });
 
-// RSS parser setup
+// RSS Parser and Feeds
 const parser = new rssParser();
 const rssFeeds = {
-  General: "https://news.google.com/rss?hl=en-IN&gl=IN&ceid=IN:en",
-  Politics: "https://news.google.com/rss/headlines/section/topic/NATION?hl=en-IN&gl=IN&ceid=IN:en",
-  Education: "https://news.google.com/rss/search?q=Education&hl=en-IN&gl=IN&ceid=IN:en",
-  World: "https://news.google.com/rss/headlines/section/topic/WORLD?hl=en-IN&gl=IN&ceid=IN:en",
-  Business: "https://news.google.com/rss/headlines/section/topic/BUSINESS?hl=en-IN&gl=IN&ceid=IN:en",
-  Technology: "https://news.google.com/rss/headlines/section/topic/TECHNOLOGY?hl=en-IN&gl=IN&ceid=IN:en",
-  Sports: "https://news.google.com/rss/headlines/section/topic/SPORTS?hl=en-IN&gl=IN&ceid=IN:en",
-  Science: "https://news.google.com/rss/headlines/section/topic/SCIENCE?hl=en-IN&gl=IN&ceid=IN:en",
-  Entertainment: "https://news.google.com/rss/headlines/section/topic/ENTERTAINMENT?hl=en-IN&gl=IN&ceid=IN:en",
-  Health: "https://news.google.com/rss/headlines/section/topic/HEALTH?hl=en-IN&gl=IN&ceid=IN:en",
+  general: "https://news.google.com/rss?hl=en-IN&gl=IN&ceid=IN:en",
+  politics: "https://news.google.com/rss/headlines/section/topic/NATION?hl=en-IN&gl=IN&ceid=IN:en",
+  education: "https://news.google.com/rss/search?q=Education&hl=en-IN&gl=IN&ceid=IN:en",
+  world: "https://news.google.com/rss/headlines/section/topic/WORLD?hl=en-IN&gl=IN&ceid=IN:en",
+  business: "https://news.google.com/rss/headlines/section/topic/BUSINESS?hl=en-IN&gl=IN&ceid=IN:en",
+  technology: "https://news.google.com/rss/headlines/section/topic/TECHNOLOGY?hl=en-IN&gl=IN&ceid=IN:en",
+  sports: "https://news.google.com/rss/headlines/section/topic/SPORTS?hl=en-IN&gl=IN&ceid=IN:en",
+  science: "https://news.google.com/rss/headlines/section/topic/SCIENCE?hl=en-IN&gl=IN&ceid=IN:en",
+  entertainment: "https://news.google.com/rss/headlines/section/topic/ENTERTAINMENT?hl=en-IN&gl=IN&ceid=IN:en",
+  health: "https://news.google.com/rss/headlines/section/topic/HEALTH?hl=en-IN&gl=IN&ceid=IN:en",
 };
 
 const BASE_URL = "https://theprint.in/";
 const categories = {
-  "Political News": "category/politics/",
-  "Education News": "category/education/",
-  "Business News": "category/business/",
-  "StockMarket News": "category/economy/",
-  "Religious News": "category/religion/",
-  "JobRelated News": "category/jobs/",
-  "Sports News": "category/sports/",
-  "Foreign News": "category/world/",
+  politics: "category/politics/",
+  education: "category/education/",
+  business: "category/business/",
+  economy: "category/economy/",
+  religion: "category/religion/",
+  jobs: "category/jobs/",
+  sports: "category/sports/",
+  world: "category/world/",
 };
 
-// Rate limiter middleware
+// Rate limiter
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 mins
+  windowMs: 15 * 60 * 1000,
   max: 100,
 });
 app.use(limiter);
 
-// Routes
+// Root route
+app.get("/", (req, res) => {
+  res.send("Welcome to Destiny News API!");
+});
 
-// Google News RSS
+// Google News endpoint
 app.get("/google-news", async (req, res) => {
-  const category = req.query.category || "General";
-  const feedUrl = rssFeeds[category] || rssFeeds.General;
+  const categoryRaw = req.query.category || "general";
+  const category = categoryRaw.toLowerCase();
+
+  const feedUrl = rssFeeds[category] || rssFeeds.general;
+
   try {
     const feed = await parser.parseURL(feedUrl);
     const articles = feed.items.map(item => ({
@@ -89,18 +94,31 @@ app.get("/google-news", async (req, res) => {
   }
 });
 
-// ThePrint news with Redis cache + pagination
+// ThePrint news endpoint with caching
 app.get("/news", async (req, res) => {
-  const category = req.query.category || "general";
+  const categoryRaw = req.query.category || "politics";
+  const category = categoryRaw.toLowerCase();
+
+  if (!categories[category]) {
+    return res.status(400).json({ error: "Invalid category" });
+  }
+
   const page = req.query.page || 1;
   const cacheKey = `${category}-${page}`;
+
   try {
     const cached = await client.get(cacheKey);
-    if (cached) return res.json(JSON.parse(cached));
+    if (cached) {
+      console.log(`Cache hit for ${cacheKey}`);
+      return res.json(JSON.parse(cached));
+    }
 
-    const url = `${BASE_URL}category/${category}?page=${page}`;
+    const url = `${BASE_URL}${categories[category]}?page=${page}`;
+    console.log(`Fetching fresh data from: ${url}`);
+
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);
+
     const articles = [];
     $(".td-module-container").each((i, el) => {
       const title = $(el).find(".entry-title a").text().trim();
@@ -109,7 +127,7 @@ app.get("/news", async (req, res) => {
       if (title && link) articles.push({ title, link, image });
     });
 
-    await client.setEx(cacheKey, 3600, JSON.stringify(articles));
+    await client.setEx(cacheKey, 3600, JSON.stringify(articles)); // Cache for 1 hour
     res.json(articles);
   } catch (err) {
     console.error("Error fetching news:", err);
@@ -117,7 +135,7 @@ app.get("/news", async (req, res) => {
   }
 });
 
-// Firebase login
+// Firebase login route
 app.post("/login", async (req, res) => {
   const { email } = req.body;
   try {
@@ -128,11 +146,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/", (req, res) => {
-  res.send("Welcome to Destiny News API!");
-});
-
-// Start server
+// Start the server
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 });
