@@ -128,6 +128,10 @@ app.post("/login", async (req, res) => {
   }
 });
 
+app.get("/", (req, res) => {
+  res.send("Welcome to Destiny News API!");
+});
+
 // Start server
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
