@@ -8,13 +8,11 @@ const admin = require("firebase-admin");
 const rssParser = require("rss-parser");
 require("dotenv").config(); // For local .env support
 
-const serviceAccount = require("./firebase-config.json");
-
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Use Render's PORT or fallback for local
+// ======= PORT =======
 const PORT = process.env.PORT || 5000;
 
 // ======= Redis Setup =======
@@ -23,7 +21,20 @@ const client = redis.createClient({
 });
 client.connect().catch(console.error);
 
-// ======= Firebase Setup =======
+// ======= Firebase Setup (Local vs Production) =======
+let serviceAccount;
+if (process.env.NODE_ENV === "production") {
+    // Render / Production — use environment variables
+    serviceAccount = {
+        projectId: process.env.FIREBASE_PROJECT_ID,
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+        privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"),
+    };
+} else {
+    // Local development — use file
+    serviceAccount = require("./firebase-config-local.json");
+}
+
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://news-aggregation-b4290.firebaseio.com"
@@ -44,7 +55,7 @@ const rssFeeds = {
     Health: "https://news.google.com/rss/headlines/section/topic/HEALTH?hl=en-IN&gl=IN&ceid=IN:en"
 };
 
-// ======= Scraping Categories for ThePrint =======
+// ======= ThePrint Categories =======
 const BASE_URL = "https://theprint.in/";
 const categories = {
     "Political News": "category/politics/",
@@ -66,7 +77,7 @@ app.use(limiter);
 
 // ======= ROUTES =======
 
-// Google News (RSS)
+// Google News RSS
 app.get("/google-news", async (req, res) => {
     const category = req.query.category || "General";
     const feedUrl = rssFeeds[category] || rssFeeds.General;
@@ -85,14 +96,14 @@ app.get("/google-news", async (req, res) => {
     }
 });
 
-// ThePrint News (with Redis Cache + Pagination)
+// ThePrint News
 app.get("/news", async (req, res) => {
     const category = req.query.category || "general";
     const page = req.query.page || 1;
     const cacheKey = `${category}-${page}`;
 
     try {
-        // Check cache
+        // Check Redis cache
         const cachedData = await client.get(cacheKey);
         if (cachedData) {
             return res.json(JSON.parse(cachedData));
